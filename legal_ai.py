@@ -5,7 +5,7 @@ import os
 # Configure layout settings to hide default menus and clean the screen
 st.set_page_config(page_title="LexAI Portal", page_icon="⚖️", layout="wide")
 
-# ELITE CORPORATE ENHANCEMENTS (REMOVED STRINGS, SEAMLESS INPUT, PRIVACY COMPLIANCE)
+# ADVANCED ENTERPRISE ARCHITECTURE (FORMAL MENU, SEAMLESS BAR, HISTORY LOGS)
 st.markdown("""
     <style>
         /* Force full layout background to uniform deep dark navy */
@@ -18,13 +18,32 @@ st.markdown("""
             background-color: #0D1E36 !important;
             border-right: 1px solid #172A45;
         }
-        /* Wipe out the broken text anomalies in the upper regions */
-        [data-testid="stSidebarCollapseButton"] button span, 
-        button[title="Expand sidebar"] span,
-        .stApp > header {
+        
+        /* --- PROMINENT THREE-LINE HAMBURGER MENU OVERRIDE --- */
+        [data-testid="stApp"] header {
+            background-color: transparent !important;
+        }
+        /* Replace broken text string with a pristine high-resolution menu icon */
+        [data-testid="stSidebarCollapseButton"] button {
+            background-color: #172A45 !important;
+            border: 1px solid #D4AF37 !important;
+            border-radius: 4px !important;
+            padding: 5px !important;
+            margin-left: 10px !important;
+            margin-top: 10px !important;
+        }
+        [data-testid="stSidebarCollapseButton"] button::before {
+            content: "☰" !important; /* Pure elegant legal three-line menu icon */
+            color: #D4AF37 !important;
+            font-size: 20px !important;
+            font-weight: bold !important;
+            display: inline-block !important;
+        }
+        [data-testid="stSidebarCollapseButton"] button span {
             display: none !important;
             visibility: hidden !important;
         }
+        
         /* Enforce elegant legal text styling globally */
         p, span, label, li {
             color: #CCD6F6 !important;
@@ -45,21 +64,20 @@ st.markdown("""
         
         /* --- PROMINENT ICE-BLUE TYPING BAR OVERHAUL --- */
         [data-testid="stBottom"] {
-            background-color: #0A192F !important; /* Force the outer frame block to be deep navy */
+            background-color: #0A192F !important;
             border-top: none !important;
         }
         [data-testid="stChatInput"] {
-            background-color: #172A45 !important; /* Block container background */
-            border: 2px solid #CCD6F6 !important; /* Crisp Baby Blue outer boundary */
+            background-color: #172A45 !important;
+            border: 2px solid #CCD6F6 !important;
             border-radius: 8px !important;
         }
         [data-testid="stChatInput"] textarea {
-            color: #CCD6F6 !important; /* Text glows baby blue while typing */
+            color: #CCD6F6 !important;
             background-color: transparent !important;
             font-family: 'Times New Roman', Times, serif !important;
             font-size: 16px !important;
         }
-        /* Style the send arrow button to match theme */
         [data-testid="stChatInput"] button {
             background-color: #CCD6F6 !important;
             color: #0A192F !important;
@@ -76,13 +94,40 @@ st.markdown("""
         .legal-links a:hover {
             text-decoration: underline !important;
         }
+        
+        /* Historical Shortcut Link Styling */
+        .history-link {
+            background-color: #172A45 !important;
+            border-left: 2px solid #CCD6F6 !important;
+            padding: 8px !important;
+            margin: 5px 0 !important;
+            border-radius: 2px !important;
+            font-size: 13px !important;
+        }
     </style>
 """, unsafe_allow_html=True)
 
-# --- SIDEBAR DESIGN ---
+# Initialize chat history early so sidebar can read it
+if "messages" not in st.session_state:
+    st.session_state.messages = []
+
+# --- SIDEBAR DESIGN (AUTOMATED CHAT HISTORY BOXES) ---
 with st.sidebar:
     st.markdown("<h2 style='color:#D4AF37; font-family:serif; letter-spacing: 1px;'>LEXAI SYSTEM</h2>", unsafe_allow_html=True)
     st.markdown("<p style='color:#00E676; font-size:12px; font-weight:bold;'>SECURE ENCRYPTED NODE ACTIVE</p>", unsafe_allow_html=True)
+    st.write("---")
+    
+    # DYNAMIC LOG: Populates shortcut boxes for every question asked
+    st.markdown("<h4 style='color:#D4AF37; font-family:serif;'>ACTIVE CHAT SESSION LOGS</h4>", unsafe_allow_html=True)
+    user_queries = [msg["content"] for msg in st.session_state.messages if msg["role"] == "user"]
+    
+    if user_queries:
+        for idx, query in enumerate(user_queries, 1):
+            short_query = query[:25] + "..." if len(query) > 25 else query
+            st.markdown(f"<div class='history-link'>📁 Session Request {idx}:<br><span style='color:#FFF; font-style:italic;'>\"{short_query}\"</span></div>", unsafe_allow_html=True)
+    else:
+        st.markdown("<p style='color:#8892B0; font-size:13px; font-style:italic;'>No active queries in current transport terminal layer.</p>", unsafe_allow_html=True)
+        
     st.write("---")
     st.markdown("<h4 style='color:#D4AF37; font-family:serif;'>DOCUMENTATION AUDIT GUIDE</h4>", unsafe_allow_html=True)
     st.markdown("""
@@ -105,10 +150,6 @@ st.markdown("""
 """, unsafe_allow_html=True)
 
 st.write("---")
-
-# Initialize chat history
-if "messages" not in st.session_state:
-    st.session_state.messages = []
 
 # Display past messages cleanly without avatars
 for msg in st.session_state.messages:
