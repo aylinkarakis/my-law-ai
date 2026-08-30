@@ -21,8 +21,6 @@ st.markdown("""
         
         /* --- HARD-WIPE EVERY ACCIDENTAL HEADER STRING OUT OF EXISTENCE --- */
         [data-testid="collapsedControl"], 
-        [data-testid="stSidebarCollapseButton"] span,
-        [data-testid="stSidebarCollapseButton"] div,
         span[data-testid="stHeaderActionElements"],
         header, .stApp > header {
             display: none !important;
@@ -34,7 +32,7 @@ st.markdown("""
             height: 0px !important;
         }
         
-        /* --- BRAND NEW HAND-BUILT THREE-LINE MENU ICON (NO BUILT-IN TEMPLATES) --- */
+        /* --- BRAND NEW HAND-BUILT THREE-LINE MENU ICON (ISOLATED RULES) --- */
         [data-testid="stSidebarCollapseButton"] button {
             background-color: #172A45 !important;
             border: 1px solid #D4AF37 !important;
@@ -44,14 +42,28 @@ st.markdown("""
             margin-top: 10px !important;
             min-height: 40px !important;
             min-width: 45px !important;
+            position: relative !important;
         }
-        /* Safely inject the 3-line legal menu layout symbol */
+        /* Force the stubborn default internal labels to completely hide */
+        [data-testid="stSidebarCollapseButton"] button * {
+            font-size: 0px !important;
+            color: transparent !important;
+            display: none !important;
+            opacity: 0 !important;
+        }
+        /* Pure independent vector text injection for the 3 lines */
         [data-testid="stSidebarCollapseButton"] button::before {
             content: "☰" !important; 
             color: #D4AF37 !important;
-            font-size: 20px !important;
+            font-size: 22px !important;
             font-weight: bold !important;
-            display: inline-block !important;
+            display: block !important;
+            position: absolute !important;
+            top: 50% !important;
+            left: 50% !important;
+            transform: translate(-50%, -50%) !important;
+            opacity: 1 !important;
+            visibility: visible !important;
         }
         
         /* Enforce elegant legal text styling globally */
