@@ -5,7 +5,7 @@ import os
 # Configure layout settings to hide default menus and clean the screen
 st.set_page_config(page_title="LexAI Portal", page_icon="⚖️", layout="wide")
 
-# ADVANCED MULTI-CHAT ENTERPRISE OVERRIDES
+# ADVANCED ENTERPRISE ARCHITECTURE (NATIVE ICON INJECTION & SEAMLESS NAVY)
 st.markdown("""
     <style>
         /* Force full layout background to uniform deep dark navy */
@@ -19,16 +19,53 @@ st.markdown("""
             border-right: 1px solid #172A45;
         }
         
-        /* Wipe the default platform headers completely */
-        [data-testid="collapsedControl"], 
-        [data-testid="stSidebarCollapseButton"],
-        span[data-testid="stHeaderActionElements"],
-        header, .stApp > header {
+        /* RADICAL HARD-WIPE TO PREVENT THE OLD ARROW TEXT FROM EVER LEAKING BACK */
+        [data-testid="collapsedControl"] {
             display: none !important;
             visibility: hidden !important;
             opacity: 0 !important;
+            font-size: 0px !important;
         }
         
+        /* --- HAND-BUILT INDEPENDENT HAMBURGER ICON (IMMUNE TO BLANKET ERASURE) --- */
+        [data-testid="stSidebarCollapseButton"] button {
+            background-color: #172A45 !important;
+            border: 1px solid #D4AF37 !important;
+            border-radius: 4px !important;
+            padding: 0px !important;
+            margin-left: 10px !important;
+            margin-top: 10px !important;
+            min-height: 38px !important;
+            min-width: 42px !important;
+            position: relative !important;
+            display: flex !important;
+            align-items: center !important;
+            justify-content: center !important;
+        }
+        /* Completely hide every native label variable inside that container button */
+        [data-testid="stSidebarCollapseButton"] button * {
+            display: none !important;
+            font-size: 0px !important;
+            opacity: 0 !important;
+        }
+        /* Inject three horizontal lines manually via vector design lines */
+        [data-testid="stSidebarCollapseButton"] button::after {
+            content: "☰" !important; 
+            color: #D4AF37 !important;
+            font-size: 24px !important;
+            font-weight: bold !important;
+            position: absolute !important;
+            line-height: 1 !important;
+            display: block !important;
+            visibility: visible !important;
+            opacity: 1 !important;
+        }
+        
+        /* Wipe out general header layouts */
+        .stApp > header {
+            display: none !important;
+            visibility: hidden !important;
+        }
         /* Enforce elegant legal text styling globally */
         p, span, label, li, div {
             color: #CCD6F6 !important;
@@ -69,14 +106,6 @@ st.markdown("""
             border-radius: 4px !important;
         }
         
-        /* Styling for Account Buttons and Chat Selection Blocks */
-        .stButton>button {
-            border-radius: 6px !important;
-            font-family: serif !important;
-            font-weight: bold !important;
-            width: 100% !important;
-        }
-        
         /* Stylized legal footer links text */
         .legal-links a {
             color: #D4AF37 !important;
@@ -96,7 +125,6 @@ st.markdown("""
             margin: 8px 0 !important;
             border-radius: 4px !important;
             font-size: 14px !important;
-            cursor: pointer;
         }
         
         /* User Profile Avatar Section at Bottom of Sidebar */
@@ -126,9 +154,6 @@ st.markdown("""
         .profile-email {
             font-size: 13px !important;
             color: #F8F9FA !important;
-            white-space: nowrap;
-            overflow: hidden;
-            text-overflow: ellipsis;
         }
     </style>
 """, unsafe_allow_html=True)
@@ -210,9 +235,3 @@ if user_question := st.chat_input("Ask a legal question..."):
             ]
             
             response = client.chat.completions.create(model="gpt-4o-mini", messages=prompt_context)
-            ai_reply = response.choices.message.content
-        except Exception:
-            ai_reply = "Authentication Failure: Could not establish a secure connection to the Cloud AI Engine. Please check your Secret API Key structure inside the Streamlit Secrets vault."
-        
-        st.markdown(f"<span style='color:#D4AF37; font-weight:bold;'>System Response: </span>{ai_reply}", unsafe_allow_html=True)
-        st.session_state.messages.append({"role": "assistant", "content": ai_reply})
