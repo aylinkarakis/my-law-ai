@@ -5,7 +5,7 @@ import os
 # Configure layout settings to hide default menus and clean the screen
 st.set_page_config(page_title="LexAI Portal", page_icon="⚖️", layout="wide")
 
-# ADVANCED ENTERPRISE ARCHITECTURE (FORMAL MENU, SEAMLESS BAR, HISTORY LOGS)
+# ADVANCED ENTERPRISE ARCHITECTURE (TOTAL STRING DELETION & SEAMLESS OVERRIDES)
 st.markdown("""
     <style>
         /* Force full layout background to uniform deep dark navy */
@@ -19,19 +19,22 @@ st.markdown("""
             border-right: 1px solid #172A45;
         }
         
-        /* --- ABSOLUTE DISAPPEARANCE OF THE STUBBORN UPPER LEFT STRING --- */
-        [data-testid="collapsedControl"] {
+        /* --- HARD-WIPE EVERY ACCIDENTAL HEADER STRING OUT OF EXISTENCE --- */
+        [data-testid="collapsedControl"], 
+        [data-testid="stSidebarCollapseButton"] span,
+        [data-testid="stSidebarCollapseButton"] div,
+        span[data-testid="stHeaderActionElements"],
+        header, .stApp > header {
             display: none !important;
             visibility: hidden !important;
             opacity: 0 !important;
             font-size: 0px !important;
+            color: transparent !important;
+            width: 0px !important;
+            height: 0px !important;
         }
         
-        /* --- PROMINENT THREE-LINE HAMBURGER MENU OVERRIDE --- */
-        [data-testid="stApp"] header {
-            background-color: transparent !important;
-        }
-        /* Style the button container */
+        /* --- BRAND NEW HAND-BUILT THREE-LINE MENU ICON (NO BUILT-IN TEMPLATES) --- */
         [data-testid="stSidebarCollapseButton"] button {
             background-color: #172A45 !important;
             border: 1px solid #D4AF37 !important;
@@ -42,7 +45,7 @@ st.markdown("""
             min-height: 40px !important;
             min-width: 45px !important;
         }
-        /* Inject the elegant 3-line symbol */
+        /* Safely inject the 3-line legal menu layout symbol */
         [data-testid="stSidebarCollapseButton"] button::before {
             content: "☰" !important; 
             color: #D4AF37 !important;
@@ -50,17 +53,7 @@ st.markdown("""
             font-weight: bold !important;
             display: inline-block !important;
         }
-        /* Hide all internal contents of that button */
-        [data-testid="stSidebarCollapseButton"] button * {
-            display: none !important;
-            font-size: 0px !important;
-        }
         
-        /* Wipe out general header layouts */
-        .stApp > header {
-            display: none !important;
-            visibility: hidden !important;
-        }
         /* Enforce elegant legal text styling globally */
         p, span, label, li {
             color: #CCD6F6 !important;
@@ -86,11 +79,11 @@ st.markdown("""
         }
         [data-testid="stChatInput"] {
             background-color: #172A45 !important;
-            border: 2px solid #CCD6F6 !important; /* Crisp Baby Blue outer boundary */
+            border: 2px solid #CCD6F6 !important;
             border-radius: 8px !important;
         }
         [data-testid="stChatInput"] textarea {
-            color: #CCD6F6 !important; /* Text glows baby blue while typing */
+            color: #CCD6F6 !important;
             background-color: transparent !important;
             font-family: 'Times New Roman', Times, serif !important;
             font-size: 16px !important;
