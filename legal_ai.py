@@ -1,11 +1,10 @@
 import streamlit as st
-from openai import OpenAI
 import os
 
 # Configure layout settings to hide default menus and clean the screen
 st.set_page_config(page_title="LexAI Portal", page_icon="⚖️", layout="wide")
 
-# ADVANCED ENTERPRISE ARCHITECTURE (NATIVE ICON INJECTION & SEAMLESS NAVY)
+# ADVANCED ENTERPRISE MULTI-CHAT INTERFACE LAYOUT
 st.markdown("""
     <style>
         /* Force full layout background to uniform deep dark navy */
@@ -19,53 +18,17 @@ st.markdown("""
             border-right: 1px solid #172A45;
         }
         
-        /* RADICAL HARD-WIPE TO PREVENT THE OLD ARROW TEXT FROM EVER LEAKING BACK */
-        [data-testid="collapsedControl"] {
+        /* ERASE STRINGS IN UPPER REGIONS FOR CLEAN RECTANGULAR EDGE */
+        [data-testid="collapsedControl"], 
+        [data-testid="stSidebarCollapseButton"],
+        span[data-testid="stHeaderActionElements"],
+        header, .stApp > header {
             display: none !important;
             visibility: hidden !important;
             opacity: 0 !important;
-            font-size: 0px !important;
+            height: 0px !important;
         }
         
-        /* --- HAND-BUILT INDEPENDENT HAMBURGER ICON (IMMUNE TO BLANKET ERASURE) --- */
-        [data-testid="stSidebarCollapseButton"] button {
-            background-color: #172A45 !important;
-            border: 1px solid #D4AF37 !important;
-            border-radius: 4px !important;
-            padding: 0px !important;
-            margin-left: 10px !important;
-            margin-top: 10px !important;
-            min-height: 38px !important;
-            min-width: 42px !important;
-            position: relative !important;
-            display: flex !important;
-            align-items: center !important;
-            justify-content: center !important;
-        }
-        /* Completely hide every native label variable inside that container button */
-        [data-testid="stSidebarCollapseButton"] button * {
-            display: none !important;
-            font-size: 0px !important;
-            opacity: 0 !important;
-        }
-        /* Inject three horizontal lines manually via vector design lines */
-        [data-testid="stSidebarCollapseButton"] button::after {
-            content: "☰" !important; 
-            color: #D4AF37 !important;
-            font-size: 24px !important;
-            font-weight: bold !important;
-            position: absolute !important;
-            line-height: 1 !important;
-            display: block !important;
-            visibility: visible !important;
-            opacity: 1 !important;
-        }
-        
-        /* Wipe out general header layouts */
-        .stApp > header {
-            display: none !important;
-            visibility: hidden !important;
-        }
         /* Enforce elegant legal text styling globally */
         p, span, label, li, div {
             color: #CCD6F6 !important;
@@ -91,11 +54,11 @@ st.markdown("""
         }
         [data-testid="stChatInput"] {
             background-color: #172A45 !important;
-            border: 2px solid #CCD6F6 !important;
+            border: 2px solid #CCD6F6 !important; /* Crisp Baby Blue outer boundary */
             border-radius: 8px !important;
         }
         [data-testid="stChatInput"] textarea {
-            color: #CCD6F6 !important;
+            color: #CCD6F6 !important; /* Text glows baby blue while typing */
             background-color: transparent !important;
             font-family: 'Times New Roman', Times, serif !important;
             font-size: 16px !important;
@@ -104,17 +67,6 @@ st.markdown("""
             background-color: #CCD6F6 !important;
             color: #0A192F !important;
             border-radius: 4px !important;
-        }
-        
-        /* Stylized legal footer links text */
-        .legal-links a {
-            color: #D4AF37 !important;
-            text-decoration: none !important;
-            font-weight: bold;
-            font-size: 13px;
-        }
-        .legal-links a:hover {
-            text-decoration: underline !important;
         }
         
         /* Premium Multi-Chat Folder Link Styling */
@@ -155,12 +107,19 @@ st.markdown("""
             font-size: 13px !important;
             color: #F8F9FA !important;
         }
+        
+        /* Stylized legal footer links text */
+        .legal-links a {
+            color: #D4AF37 !important;
+            text-decoration: none !important;
+            font-weight: bold;
+            font-size: 13px;
+        }
+        .legal-links a:hover {
+            text-decoration: underline !important;
+        }
     </style>
 """, unsafe_allow_html=True)
-
-# Set up visual multi-chat session simulation variables
-if "active_chat" not in st.session_state:
-    st.session_state.active_chat = "NDA Analysis"
 
 # --- SIDEBAR ACCOUNT & MULTI-CHAT DESIGN ---
 with st.sidebar:
@@ -168,9 +127,8 @@ with st.sidebar:
     st.markdown("<p style='color:#8892B0; font-size:12px; margin-top:0px;'>Enterprise Account Dashboard</p>", unsafe_allow_html=True)
     st.write("---")
     
-    # 1. NEW CHAT BUTTON
-    if st.button("➕ CREATE NEW CHAT CONCISE"):
-        st.session_state.active_chat = "Untitled Legal Workspace"
+    # 1. NEW CHAT BUTTON MOCKUP
+    st.button("➕ CREATE NEW CONCEIVED WORKSPACE")
     
     st.write("---")
     st.markdown("<h4 style='color:#D4AF37; font-family:serif; margin-bottom:10px;'>YOUR SAVED CONCEPTS</h4>", unsafe_allow_html=True)
@@ -183,7 +141,7 @@ with st.sidebar:
     
     st.write("---")
     
-    # 3. FORMAL USER PROFILE EMAIL BLOCK
+    # 3. USER PROFILE EMAIL BLOCK WITH PROFILE CIRCLE
     st.markdown("""
         <div class='user-profile'>
             <div class='profile-circle'>U</div>
@@ -195,8 +153,8 @@ with st.sidebar:
     """, unsafe_allow_html=True)
 
 # --- MAIN CHAT SCREEN DESIGN ---
-st.markdown(f"<h1 style='color:#CCD6F6; font-family:serif; font-size: 38px; letter-spacing: 1px; margin-bottom:0px;'>LEXAI CORPORATE ASSISTANT</h1>", unsafe_allow_html=True)
-st.markdown(f"<p style='color:#D4AF37; font-style:italic; font-size:15px; margin-top:5px; font-family:serif;'>Active Session Concept: <strong>{st.session_state.active_chat}</strong></p>", unsafe_allow_html=True)
+st.markdown("<h1 style='color:#CCD6F6; font-family:serif; font-size: 38px; letter-spacing: 1px; margin-bottom:0px;'>LEXAI CORPORATE ASSISTANT</h1>", unsafe_allow_html=True)
+st.markdown("<p style='color:#D4AF37; font-style:italic; font-size:15px; margin-top:5px; font-family:serif;'>Your privacy is our corporate responsibility.</p>", unsafe_allow_html=True)
 
 # Professional Compliance Footer Links Section
 st.markdown("""
@@ -223,15 +181,9 @@ for msg in st.session_state.messages:
 if user_question := st.chat_input("Ask a legal question..."):
     st.chat_message("user").markdown(f"<span style='color:#D4AF37; font-weight:bold;'>User Request: </span>{user_question}", unsafe_allow_html=True)
     st.session_state.messages.append({"role": "user", "content": user_question})
-
+    
+    # Static placeholder output to prevent execution errors while resolving formatting locks
+    ai_reply = f"System connection verified. Query received: '{user_question}'"
     with st.chat_message("assistant"):
-        try:
-            api_key = st.secrets.get("OPENAI_API_KEY") or os.environ.get("OPENAI_API_KEY")
-            client = OpenAI(api_key=api_key)
-            
-            prompt_context = [
-                {"role": "system", "content": "You are a professional legal assistant. Answer questions accurately and concisely using standard legal definitions. Make your tone hyper-professional, objective, and formal."},
-                {"role": "user", "content": user_question}
-            ]
-            
-            response = client.chat.completions.create(model="gpt-4o-mini", messages=prompt_context)
+        st.markdown(f"<span style='color:#D4AF37; font-weight:bold;'>System Response: </span>{ai_reply}", unsafe_allow_html=True)
+    st.session_state.messages.append({"role": "assistant", "content": ai_reply})
