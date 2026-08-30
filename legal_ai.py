@@ -5,7 +5,7 @@ import os
 # Configure layout settings to hide default menus and clean the screen
 st.set_page_config(page_title="LexAI Portal", page_icon="⚖️", layout="wide")
 
-# ADVANCED ENTERPRISE ARCHITECTURE (SEAMLESS NAVY ELEMENTS, FORMAL GRAPHICS)
+# ADVANCED ENTERPRISE ARCHITECTURE (FORMAL MENU, SEAMLESS BAR, HISTORY LOGS)
 st.markdown("""
     <style>
         /* Force full layout background to uniform deep dark navy */
@@ -19,14 +19,22 @@ st.markdown("""
             border-right: 1px solid #172A45;
         }
         
-        /* --- SEAMLESS NAVY HAMBURGER MENU OVERRIDE --- */
+        /* --- ABSOLUTE DISAPPEARANCE OF THE STUBBORN UPPER LEFT STRING --- */
+        [data-testid="collapsedControl"] {
+            display: none !important;
+            visibility: hidden !important;
+            opacity: 0 !important;
+            font-size: 0px !important;
+        }
+        
+        /* --- PROMINENT THREE-LINE HAMBURGER MENU OVERRIDE --- */
         [data-testid="stApp"] header {
             background-color: transparent !important;
         }
-        /* Style the button container to blend perfectly with the navy theme */
+        /* Style the button container */
         [data-testid="stSidebarCollapseButton"] button {
-            background-color: #0A192F !important; /* Forces background to match main page navy */
-            border: 1px solid #D4AF37 !important; /* Premium Gold boundary frame */
+            background-color: #172A45 !important;
+            border: 1px solid #D4AF37 !important;
             border-radius: 4px !important;
             padding: 5px !important;
             margin-left: 10px !important;
@@ -34,7 +42,7 @@ st.markdown("""
             min-height: 40px !important;
             min-width: 45px !important;
         }
-        /* Inject the elegant 3-line legal symbol */
+        /* Inject the elegant 3-line symbol */
         [data-testid="stSidebarCollapseButton"] button::before {
             content: "☰" !important; 
             color: #D4AF37 !important;
@@ -42,14 +50,10 @@ st.markdown("""
             font-weight: bold !important;
             display: inline-block !important;
         }
-        /* CRUSH THE STUBBORN ICON TEXT LABEL TO ZERO SIZE AND MAKE IT INVISIBLE */
-        [data-testid="stSidebarCollapseButton"] button *, 
-        [data-testid="stSidebarCollapseButton"] button span,
-        [data-testid="stSidebarCollapseButton"] button div {
-            font-size: 0px !important;
-            color: transparent !important;
+        /* Hide all internal contents of that button */
+        [data-testid="stSidebarCollapseButton"] button * {
             display: none !important;
-            visibility: hidden !important;
+            font-size: 0px !important;
         }
         
         /* Wipe out general header layouts */
@@ -82,11 +86,11 @@ st.markdown("""
         }
         [data-testid="stChatInput"] {
             background-color: #172A45 !important;
-            border: 2px solid #CCD6F6 !important;
+            border: 2px solid #CCD6F6 !important; /* Crisp Baby Blue outer boundary */
             border-radius: 8px !important;
         }
         [data-testid="stChatInput"] textarea {
-            color: #CCD6F6 !important;
+            color: #CCD6F6 !important; /* Text glows baby blue while typing */
             background-color: transparent !important;
             font-family: 'Times New Roman', Times, serif !important;
             font-size: 16px !important;
