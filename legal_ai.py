@@ -5,7 +5,7 @@ import os
 # Configure layout settings to hide default menus and lock full screen width
 st.set_page_config(page_title="LexAI Portal", page_icon="⚖️", layout="wide")
 
-# FORCE THE NAVY, GOLD, AND HIGH-CONTRAST TYPING TEXT COLORS VIA CUSTOM CSS
+# SOLID BLUEPRINT FOR FULLY FORMAL MULTI-COLUMN DESIGN (ZERO TEXT ROW OVERLAPS)
 st.markdown("""
     <style>
         /* Force full layout background to uniform deep dark navy */
@@ -14,7 +14,7 @@ st.markdown("""
             color: #F8F9FA !important;
         }
         
-        /* HARD-WIPE THE DEFAULT TEMPLATE MENUS OUT OF EXISTENCE */
+        /* HARD-WIPE THE DEFAULT SIDEBAR LOGIC FROM PREVENTING EXPANSION CHANNELS */
         [data-testid="collapsedControl"], 
         [data-testid="stSidebar"],
         [data-testid="stSidebarCollapseButton"],
@@ -22,6 +22,8 @@ st.markdown("""
             display: none !important;
             visibility: hidden !important;
             opacity: 0 !important;
+            width: 0px !important;
+            height: 0px !important;
         }
         
         /* Enforce elegant legal text styling globally */
@@ -49,11 +51,13 @@ st.markdown("""
             margin-top: 40px;
         }
         
-        /* --- ELIMINATE RE-EMERGING CHAT ROW ICON OVERLAPS --- */
+        /* --- HARD-WIPE ALL TEXT LABEL OVERLAPS OUT OF CHAT ENGINES --- */
         [data-testid="stChatMessageAvatarContainer"], 
         .stChatMessageIcon, 
         [data-testid="stChatMessage"] svg,
-        [data-testid="stChatMessage"] img {
+        [data-testid="stChatMessage"] img,
+        [data-testid="stChatMessage"] span::before,
+        .stApp p::before {
             display: none !important;
             visibility: hidden !important;
             width: 0px !important;
@@ -81,12 +85,12 @@ st.markdown("""
             border-top: none !important;
         }
         [data-testid="stChatInput"] {
-            background-color: #FFFFFF !important; /* Crisp white input container */
+            background-color: #FFFFFF !important; /* Crisp white typing bar container */
             border: 2px solid #CCD6F6 !important;
             border-radius: 8px !important;
         }
         [data-testid="stChatInput"] textarea {
-            color: #0A192F !important; /* Deep black-navy text while typing! */
+            color: #0A192F !important; /* Deep navy text while typing */
             background-color: transparent !important;
             font-size: 16px !important;
         }
@@ -94,6 +98,17 @@ st.markdown("""
             background-color: #172A45 !important;
             color: #D4AF37 !important;
             border-radius: 4px !important;
+        }
+        
+        /* Stylized legal footer links text */
+        .legal-links a {
+            color: #D4AF37 !important;
+            text-decoration: none !important;
+            font-weight: bold;
+            font-size: 13px;
+        }
+        .legal-links a:hover {
+            text-decoration: underline !important;
         }
     </style>
 """, unsafe_allow_html=True)
@@ -117,7 +132,7 @@ with col_menu:
     
     st.markdown("<hr style='border-color: #172A45; margin-top:30px;'>", unsafe_allow_html=True)
     st.markdown("<h4 style='color:#D4AF37; font-size:15px;'>DOCUMENTATION AUDIT GUIDE</h4>", unsafe_allow_html=True)
-    st.markdown("<p style='font-size:13px; color:#CCD6F6;'>1. Input queries into active layout layer.<br>2. Local AI engine cross-references parameters instantly.</p>", unsafe_allow_html=True)
+    st.markdown("<p style='font-size:13px; color:#CCD6F6;'>1. Input queries into active layout layer.<br>2. System parameters process securely.</p>", unsafe_allow_html=True)
     
     # Account panel footer details
     st.markdown("""
@@ -156,25 +171,24 @@ with col_chat:
         with st.chat_message(msg["role"]):
             st.markdown(f"<span style='color:#D4AF37; font-weight:bold;'>{prefix}</span><span style='color:#F8F9FA;'>{msg['content']}</span>", unsafe_allow_html=True)
 
-    # Handle user input using the FREE local Llama engine
+    # Handle user input using the local Llama engine
     if user_question := st.chat_input("Ask a legal question..."):
         st.chat_message("user").markdown(f"<span style='color:#D4AF37; font-weight:bold;'>User Request: </span><span style='color:#F8F9FA;'>{user_question}</span>", unsafe_allow_html=True)
         st.session_state.messages.append({"role": "user", "content": user_question})
 
         with st.chat_message("assistant"):
-            with st.spinner("Processing locally on secure enterprise layer..."):
-                try:
-                    response = requests.post(
-                        "http://localhost:11434/api/generate",
-                        json={
-                            "model": "llama3.2:1b",
-                            "prompt": f"Answer as a formal legal assistant: {user_question}",
-                            "stream": False
-                        }
-                    )
-                    ai_reply = response.json().get("response", "Error reading response.")
-                except Exception:
-                    ai_reply = "Could not connect to Ollama. Please make sure the Ollama application (the little llama icon in your top menu bar) is active and running!"
-                
-                st.markdown(f"<span style='color:#D4AF37; font-weight:bold;'>System Response: </span><span style='color:#F8F9FA;'>{ai_reply}</span>", unsafe_allow_html=True)
-                st.session_state.messages.append({"role": "assistant", "content": ai_reply})
+            try:
+                response = requests.post(
+                    "http://localhost:11434/api/generate",
+                    json={
+                        "model": "llama3.2:1b",
+                        "prompt": f"Answer as a formal legal assistant: {user_question}",
+                        "stream": False
+                    }
+                )
+                ai_reply = response.json().get("response", "Error reading response.")
+            except Exception:
+                ai_reply = "Could not connect to Ollama. Please make sure the Ollama application (the little llama icon in your top menu bar) is active and running on your local device context layers!"
+            
+            st.markdown(f"<span style='color:#D4AF37; font-weight:bold;'>System Response: </span><span style='color:#F8F9FA;'>{ai_reply}</span>", unsafe_allow_html=True)
+            st.session_state.messages.append({"role": "assistant", "content": ai_reply})
