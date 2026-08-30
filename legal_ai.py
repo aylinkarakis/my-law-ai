@@ -37,7 +37,7 @@ st.markdown("""
             display: flex !important;
             align-items: center !important;
             justify-content: center !important;
-            font-size: 0px !important; /* Crushes default text labels completely */
+            font-size: 0px !important;
         }
         /* Inject the elegant gold 3-line symbol safely */
         [data-testid="stSidebarCollapseButton"] button::before {
@@ -213,6 +213,10 @@ st.markdown("""
 
 st.write("---")
 
+# Initialize chat history
+if "messages" not in st.session_state:
+    st.session_state.messages = []
+
 # Display past messages cleanly without avatars or icon labels
 for msg in st.session_state.messages:
     prefix = "User Request: " if msg["role"] == "user" else "System Response: "
@@ -231,4 +235,3 @@ if user_question := st.chat_input("Ask a legal question..."):
             client = OpenAI(api_key=api_key)
             
             prompt_context = [
-                {"role": "system", "content": "You are a professional legal assistant. Answer questions accurately and concisely using standard legal definitions. Make your tone hyper-professional, objective, and formal."},
