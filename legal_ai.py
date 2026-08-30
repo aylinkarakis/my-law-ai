@@ -1,5 +1,5 @@
 import streamlit as st
-import requests
+from openai import OpenAI
 import os
 
 # Configure layout settings to hide default menus and lock full screen width
@@ -63,7 +63,7 @@ st.markdown("""
             opacity: 0 !important;
         }
         
-        /* --- HAND-BUILT CHAT BLOCK DESIGN (ELIMINATES OVERLAPPING WORDS) --- */
+        /* --- CRISP WHITE MESSAGE BODY STYLE OVERRIDE --- */
         .custom-chat-row {
             background-color: #172A45 !important;
             border-left: 3px solid #D4AF37 !important;
@@ -73,14 +73,14 @@ st.markdown("""
             display: block !important;
         }
         .prefix-label {
-            color: #D4AF37 !important;
+            color: #D4AF37 !important; /* Keep prefix label Corporate Gold */
             font-weight: bold !important;
             font-size: 16px !important;
             display: block !important;
             margin-bottom: 5px !important;
         }
         .message-body {
-            color: #F8F9FA !important;
+            color: #FFFFFF !important; /* FORCED CRISP WHITE FOR TYPED TEXTS AND RESPONSES */
             font-size: 15px !important;
             line-height: 1.5 !important;
         }
@@ -130,7 +130,6 @@ with col_menu:
     
     st.markdown("<h4 style='color:#D4AF37; font-size:16px;'>YOUR SAVED CONCEPTS</h4>", unsafe_allow_html=True)
     
-    # Render native container cards cleanly
     st.markdown("<div class='chat-folder-box'><span style='color:#CCD6F6;'>💬 📑 NDA Analysis & Review</span><br><span style='font-size:11px; color:#8892B0;'>Last edited: Active</span></div>", unsafe_allow_html=True)
     st.markdown("<div class='chat-folder-box' style='border-left-color:#8892B0; opacity:0.6;'><span style='color:#8892B0;'>💬 📜 Trademark Registration</span></div>", unsafe_allow_html=True)
     st.markdown("<div class='chat-folder-box' style='border-left-color:#8892B0; opacity:0.6;'><span style='color:#8892B0;'>💬 💼 Employment Parameters</span></div>", unsafe_allow_html=True)
@@ -138,9 +137,8 @@ with col_menu:
     
     st.markdown("<hr style='border-color: #172A45; margin-top:30px;'>", unsafe_allow_html=True)
     st.markdown("<h4 style='color:#D4AF37; font-size:15px;'>DOCUMENTATION AUDIT GUIDE</h4>", unsafe_allow_html=True)
-    st.markdown("<p style='font-size:13px; color:#CCD6F6;'>1. Input queries into active layout layer.<br>2. System parameters process securely.</p>", unsafe_allow_html=True)
+    st.markdown("<p style='font-size:13px; color:#CCD6F6;'>1. Input queries into active layout layer.<br>2. Cloud engine cross-references parameters instantly.</p>", unsafe_allow_html=True)
     
-    # Account panel footer details
     st.markdown("""
         <div class='user-profile-box'>
             <div style='width:35px; height:35px; background-color:#D4AF37; color:#0A192F; border-radius:50%; display:flex; align-items:center; justify-content:center; font-weight:bold; margin-right:12px;'>U</div>
@@ -156,7 +154,6 @@ with col_chat:
     st.markdown("<h1 style='color:#CCD6F6; font-size: 38px; letter-spacing: 1px; margin-bottom:0px;'>LEXAI CORPORATE ASSISTANT</h1>", unsafe_allow_html=True)
     st.markdown("<p style='color:#D4AF37; font-style:italic; font-size:15px; margin-top:5px;'>Your privacy is our corporate responsibility.</p>", unsafe_allow_html=True)
 
-    # Compliance Footer Links Section
     st.markdown("""
         <p style='font-size:13px; margin-top:5px; margin-bottom:15px;'>
             <a href='#' style='color:#D4AF37; text-decoration:none; font-weight:bold;'>Privacy Policy</a> &nbsp;|&nbsp; 
@@ -167,11 +164,9 @@ with col_chat:
 
     st.write("---")
 
-    # Initialize chat history
     if "messages" not in st.session_state:
         st.session_state.messages = []
 
-    # Display past messages cleanly with zero template overlaps
     for msg in st.session_state.messages:
         label_text = "User Request:" if msg["role"] == "user" else "System Response:"
         st.markdown(f"""
@@ -181,9 +176,7 @@ with col_chat:
             </div>
         """, unsafe_allow_html=True)
 
-    # Handle user input using the local Llama engine parameters
     if user_question := st.chat_input("Ask a legal question..."):
-        # Instantly render the new question onto the layout display
         st.markdown(f"""
             <div class='custom-chat-row'>
                 <span class='prefix-label'>User Request:</span>
@@ -193,17 +186,17 @@ with col_chat:
         st.session_state.messages.append({"role": "user", "content": user_question})
 
         try:
-            response = requests.post(
-                "http://localhost:11434/api/generate",
-                json={
-                    "model": "llama3.2:1b",
-                    "prompt": f"Answer as a formal legal assistant: {user_question}",
-                    "stream": False
-                }
+            # Read the secure key stored inside your public app settings
+            api_key = st.secrets.get("OPENAI_API_KEY") or os.environ.get("OPENAI_API_KEY")
+            client = OpenAI(api_key=api_key)
+            
+            response = client.chat.completions.create(
+                model="gpt-4o-mini",
+                messages=[{"role": "user", "content": f"Answer as a formal legal assistant: {user_question}"}]
             )
-            ai_reply = response.json().get("response", "Error reading response.")
+            ai_reply = response.choices.message.content
         except Exception:
-            ai_reply = "Could not connect to Ollama. Please make sure the Ollama application (the little llama icon in your top menu bar) is active and running on your local device context layers!"
+            ai_reply = "Authentication Failure: Could not establish a secure connection to the Cloud AI Engine. Please check your Secret API Key structure inside your Streamlit Secrets box."
         
         st.markdown(f"""
             <div class='custom-chat-row'>
