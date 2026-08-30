@@ -1,10 +1,11 @@
 import streamlit as st
+from openai import OpenAI
 import os
 
 # Configure layout settings to hide default menus and clean the screen
 st.set_page_config(page_title="LexAI Portal", page_icon="⚖️", layout="wide")
 
-# ADVANCED ENTERPRISE MULTI-CHAT INTERFACE LAYOUT
+# ADVANCED ENTERPRISE ARCHITECTURE (FIXED OVERLAPS, RE-ENABLED 3-LINES & SIDEBAR)
 st.markdown("""
     <style>
         /* Force full layout background to uniform deep dark navy */
@@ -18,15 +19,54 @@ st.markdown("""
             border-right: 1px solid #172A45;
         }
         
-        /* ERASE STRINGS IN UPPER REGIONS FOR CLEAN RECTANGULAR EDGE */
-        [data-testid="collapsedControl"], 
-        [data-testid="stSidebarCollapseButton"],
-        span[data-testid="stHeaderActionElements"],
-        header, .stApp > header {
+        /* --- PROMINENT THREE-LINE HAMBURGER MENU OVERRIDE (FIXED AND STABLE) --- */
+        [data-testid="stApp"] header {
+            background-color: transparent !important;
+        }
+        /* Clean up and style the sidebar collapse button area */
+        [data-testid="stSidebarCollapseButton"] button {
+            background-color: #172A45 !important;
+            border: 1px solid #D4AF37 !important;
+            border-radius: 4px !important;
+            padding: 5px !important;
+            margin-left: 10px !important;
+            margin-top: 10px !important;
+            min-height: 40px !important;
+            min-width: 45px !important;
+            position: relative !important;
+            display: flex !important;
+            align-items: center !important;
+            justify-content: center !important;
+            font-size: 0px !important; /* Crushes default text labels completely */
+        }
+        /* Inject the elegant gold 3-line symbol safely */
+        [data-testid="stSidebarCollapseButton"] button::before {
+            content: "☰" !important; 
+            color: #D4AF37 !important;
+            font-size: 22px !important;
+            font-weight: bold !important;
+            display: block !important;
+            position: absolute !important;
+            visibility: visible !important;
+            opacity: 1 !important;
+        }
+        /* Ensure all random default text labels inside that button stay hidden */
+        [data-testid="stSidebarCollapseButton"] button * {
+            display: none !important;
+            font-size: 0px !important;
+            opacity: 0 !important;
+        }
+        
+        /* --- ELIMINATE CHAT ROW ICON OVERLAPS COMPLETELY --- */
+        [data-testid="stChatMessageAvatarContainer"], 
+        .stChatMessageIcon, 
+        [data-testid="stChatMessage"] svg,
+        [data-testid="stChatMessage"] img {
             display: none !important;
             visibility: hidden !important;
-            opacity: 0 !important;
+            width: 0px !important;
             height: 0px !important;
+            opacity: 0 !important;
         }
         
         /* Enforce elegant legal text styling globally */
@@ -34,17 +74,19 @@ st.markdown("""
             color: #CCD6F6 !important;
             font-family: 'Times New Roman', Times, serif !important;
         }
-        /* Strip avatars from chat entries */
-        [data-testid="stChatMessageAvatarContainer"] {
-            display: none !important;
-        }
-        /* Traditional legal block chat style */
+        
+        /* Traditional legal block chat style (Clean borders, no icon overlap) */
         [data-testid="stChatMessage"] {
             background-color: #172A45 !important;
             border-left: 3px solid #D4AF37 !important;
             border-radius: 4px !important;
-            padding: 15px !important;
+            padding: 15px 20px !important;
             margin: 10px 0 !important;
+        }
+        /* Fix the interior text padding inside chat rows */
+        [data-testid="stChatMessageContent"] {
+            margin-left: 0px !important;
+            padding-left: 0px !important;
         }
         
         /* --- PROMINENT ICE-BLUE TYPING BAR OVERHAUL --- */
@@ -54,11 +96,11 @@ st.markdown("""
         }
         [data-testid="stChatInput"] {
             background-color: #172A45 !important;
-            border: 2px solid #CCD6F6 !important; /* Crisp Baby Blue outer boundary */
+            border: 2px solid #CCD6F6 !important;
             border-radius: 8px !important;
         }
         [data-testid="stChatInput"] textarea {
-            color: #CCD6F6 !important; /* Text glows baby blue while typing */
+            color: #CCD6F6 !important;
             background-color: transparent !important;
             font-family: 'Times New Roman', Times, serif !important;
             font-size: 16px !important;
@@ -67,6 +109,17 @@ st.markdown("""
             background-color: #CCD6F6 !important;
             color: #0A192F !important;
             border-radius: 4px !important;
+        }
+        
+        /* Stylized legal footer links text */
+        .legal-links a {
+            color: #D4AF37 !important;
+            text-decoration: none !important;
+            font-weight: bold;
+            font-size: 13px;
+        }
+        .legal-links a:hover {
+            text-decoration: underline !important;
         }
         
         /* Premium Multi-Chat Folder Link Styling */
@@ -107,19 +160,12 @@ st.markdown("""
             font-size: 13px !important;
             color: #F8F9FA !important;
         }
-        
-        /* Stylized legal footer links text */
-        .legal-links a {
-            color: #D4AF37 !important;
-            text-decoration: none !important;
-            font-weight: bold;
-            font-size: 13px;
-        }
-        .legal-links a:hover {
-            text-decoration: underline !important;
-        }
     </style>
 """, unsafe_allow_html=True)
+
+# Set up visual multi-chat session simulation variables
+if "active_chat" not in st.session_state:
+    st.session_state.active_chat = "NDA Analysis"
 
 # --- SIDEBAR ACCOUNT & MULTI-CHAT DESIGN ---
 with st.sidebar:
@@ -167,11 +213,7 @@ st.markdown("""
 
 st.write("---")
 
-# Initialize chat history
-if "messages" not in st.session_state:
-    st.session_state.messages = []
-
-# Display past messages cleanly without avatars
+# Display past messages cleanly without avatars or icon labels
 for msg in st.session_state.messages:
     prefix = "User Request: " if msg["role"] == "user" else "System Response: "
     with st.chat_message(msg["role"]):
@@ -181,9 +223,12 @@ for msg in st.session_state.messages:
 if user_question := st.chat_input("Ask a legal question..."):
     st.chat_message("user").markdown(f"<span style='color:#D4AF37; font-weight:bold;'>User Request: </span>{user_question}", unsafe_allow_html=True)
     st.session_state.messages.append({"role": "user", "content": user_question})
-    
-    # Static placeholder output to prevent execution errors while resolving formatting locks
-    ai_reply = f"System connection verified. Query received: '{user_question}'"
+
     with st.chat_message("assistant"):
-        st.markdown(f"<span style='color:#D4AF37; font-weight:bold;'>System Response: </span>{ai_reply}", unsafe_allow_html=True)
-    st.session_state.messages.append({"role": "assistant", "content": ai_reply})
+        try:
+            # Read the secret key saved in the Streamlit vault
+            api_key = st.secrets.get("OPENAI_API_KEY") or os.environ.get("OPENAI_API_KEY")
+            client = OpenAI(api_key=api_key)
+            
+            prompt_context = [
+                {"role": "system", "content": "You are a professional legal assistant. Answer questions accurately and concisely using standard legal definitions. Make your tone hyper-professional, objective, and formal."},
