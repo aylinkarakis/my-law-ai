@@ -5,7 +5,7 @@ import os
 # Configure layout settings to hide default menus and lock full screen width
 st.set_page_config(page_title="LexAI Portal", page_icon="⚖️", layout="wide")
 
-# SOLID BLUEPRINT FOR FULLY FORMAL MULTI-COLUMN DESIGN (ZERO TEXT ROW OVERLAPS)
+# SOLID BLUEPRINT FOR FULLY FORMAL MULTI-COLUMN DESIGN (ZERO GENERAL TEXT ROW OVERLAPS)
 st.markdown("""
     <style>
         /* Force full layout background to uniform deep dark navy */
@@ -14,7 +14,7 @@ st.markdown("""
             color: #F8F9FA !important;
         }
         
-        /* HARD-WIPE THE DEFAULT SIDEBAR LOGIC FROM PREVENTING EXPANSION CHANNELS */
+        /* HARD-WIPE THE DEFAULT SIDEBAR TEMPLATE SYSTEM */
         [data-testid="collapsedControl"], 
         [data-testid="stSidebar"],
         [data-testid="stSidebarCollapseButton"],
@@ -51,13 +51,11 @@ st.markdown("""
             margin-top: 40px;
         }
         
-        /* --- HARD-WIPE ALL TEXT LABEL OVERLAPS OUT OF CHAT ENGINES --- */
+        /* HARD-WIPE ALL BUILT-IN ICON TRACKS OUT OF EXISTENCE */
         [data-testid="stChatMessageAvatarContainer"], 
         .stChatMessageIcon, 
         [data-testid="stChatMessage"] svg,
-        [data-testid="stChatMessage"] img,
-        [data-testid="stChatMessage"] span::before,
-        .stApp p::before {
+        [data-testid="stChatMessage"] img {
             display: none !important;
             visibility: hidden !important;
             width: 0px !important;
@@ -65,18 +63,26 @@ st.markdown("""
             opacity: 0 !important;
         }
         
-        /* Traditional legal block chat style (Clean borders, no icon overlap) */
-        [data-testid="stChatMessage"] {
+        /* --- HAND-BUILT CHAT BLOCK DESIGN (ELIMINATES OVERLAPPING WORDS) --- */
+        .custom-chat-row {
             background-color: #172A45 !important;
             border-left: 3px solid #D4AF37 !important;
             border-radius: 4px !important;
             padding: 15px 20px !important;
-            margin: 10px 0 !important;
+            margin: 12px 0 !important;
+            display: block !important;
         }
-        /* Fix the interior text padding inside chat rows */
-        [data-testid="stChatMessageContent"] {
-            margin-left: 0px !important;
-            padding-left: 0px !important;
+        .prefix-label {
+            color: #D4AF37 !important;
+            font-weight: bold !important;
+            font-size: 16px !important;
+            display: block !important;
+            margin-bottom: 5px !important;
+        }
+        .message-body {
+            color: #F8F9FA !important;
+            font-size: 15px !important;
+            line-height: 1.5 !important;
         }
         
         /* --- 100% READABLE HIGH-CONTRAST TYPING BAR OVERHAUL --- */
@@ -85,12 +91,12 @@ st.markdown("""
             border-top: none !important;
         }
         [data-testid="stChatInput"] {
-            background-color: #FFFFFF !important; /* Crisp white typing bar container */
+            background-color: #FFFFFF !important; /* Crisp solid white background outer wrapper */
             border: 2px solid #CCD6F6 !important;
             border-radius: 8px !important;
         }
         [data-testid="stChatInput"] textarea {
-            color: #0A192F !important; /* Deep navy text while typing */
+            color: #0A192F !important; /* Deep black-navy text layout while typing */
             background-color: transparent !important;
             font-size: 16px !important;
         }
@@ -165,30 +171,44 @@ with col_chat:
     if "messages" not in st.session_state:
         st.session_state.messages = []
 
-    # Display past messages cleanly
+    # Display past messages cleanly with zero template overlaps
     for msg in st.session_state.messages:
-        prefix = "User Request: " if msg["role"] == "user" else "System Response: "
-        with st.chat_message(msg["role"]):
-            st.markdown(f"<span style='color:#D4AF37; font-weight:bold;'>{prefix}</span><span style='color:#F8F9FA;'>{msg['content']}</span>", unsafe_allow_html=True)
+        label_text = "User Request:" if msg["role"] == "user" else "System Response:"
+        st.markdown(f"""
+            <div class='custom-chat-row'>
+                <span class='prefix-label'>{label_text}</span>
+                <div class='message-body'>{msg['content']}</div>
+            </div>
+        """, unsafe_allow_html=True)
 
-    # Handle user input using the local Llama engine
+    # Handle user input using the local Llama engine parameters
     if user_question := st.chat_input("Ask a legal question..."):
-        st.chat_message("user").markdown(f"<span style='color:#D4AF37; font-weight:bold;'>User Request: </span><span style='color:#F8F9FA;'>{user_question}</span>", unsafe_allow_html=True)
+        # Instantly render the new question onto the layout display
+        st.markdown(f"""
+            <div class='custom-chat-row'>
+                <span class='prefix-label'>User Request:</span>
+                <div class='message-body'>{user_question}</div>
+            </div>
+        """, unsafe_allow_html=True)
         st.session_state.messages.append({"role": "user", "content": user_question})
 
-        with st.chat_message("assistant"):
-            try:
-                response = requests.post(
-                    "http://localhost:11434/api/generate",
-                    json={
-                        "model": "llama3.2:1b",
-                        "prompt": f"Answer as a formal legal assistant: {user_question}",
-                        "stream": False
-                    }
-                )
-                ai_reply = response.json().get("response", "Error reading response.")
-            except Exception:
-                ai_reply = "Could not connect to Ollama. Please make sure the Ollama application (the little llama icon in your top menu bar) is active and running on your local device context layers!"
-            
-            st.markdown(f"<span style='color:#D4AF37; font-weight:bold;'>System Response: </span><span style='color:#F8F9FA;'>{ai_reply}</span>", unsafe_allow_html=True)
-            st.session_state.messages.append({"role": "assistant", "content": ai_reply})
+        try:
+            response = requests.post(
+                "http://localhost:11434/api/generate",
+                json={
+                    "model": "llama3.2:1b",
+                    "prompt": f"Answer as a formal legal assistant: {user_question}",
+                    "stream": False
+                }
+            )
+            ai_reply = response.json().get("response", "Error reading response.")
+        except Exception:
+            ai_reply = "Could not connect to Ollama. Please make sure the Ollama application (the little llama icon in your top menu bar) is active and running on your local device context layers!"
+        
+        st.markdown(f"""
+            <div class='custom-chat-row'>
+                <span class='prefix-label'>System Response:</span>
+                <div class='message-body'>{ai_reply}</div>
+            </div>
+        """, unsafe_allow_html=True)
+        st.session_state.messages.append({"role": "assistant", "content": ai_reply})
