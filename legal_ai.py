@@ -5,7 +5,7 @@ import os
 # Configure layout settings to hide default menus and clean the screen
 st.set_page_config(page_title="LexAI Portal", page_icon="⚖️", layout="wide")
 
-# ADVANCED ENTERPRISE ARCHITECTURE (FORMAL MENU, SEAMLESS BAR, HISTORY LOGS)
+# ADVANCED ENTERPRISE ARCHITECTURE (SEAMLESS NAVY ELEMENTS, FORMAL GRAPHICS)
 st.markdown("""
     <style>
         /* Force full layout background to uniform deep dark navy */
@@ -19,31 +19,44 @@ st.markdown("""
             border-right: 1px solid #172A45;
         }
         
-        /* --- PROMINENT THREE-LINE HAMBURGER MENU OVERRIDE --- */
+        /* --- SEAMLESS NAVY HAMBURGER MENU OVERRIDE --- */
         [data-testid="stApp"] header {
             background-color: transparent !important;
         }
-        /* Replace broken text string with a pristine high-resolution menu icon */
+        /* Style the button container to blend perfectly with the navy theme */
         [data-testid="stSidebarCollapseButton"] button {
-            background-color: #172A45 !important;
-            border: 1px solid #D4AF37 !important;
+            background-color: #0A192F !important; /* Forces background to match main page navy */
+            border: 1px solid #D4AF37 !important; /* Premium Gold boundary frame */
             border-radius: 4px !important;
             padding: 5px !important;
             margin-left: 10px !important;
             margin-top: 10px !important;
+            min-height: 40px !important;
+            min-width: 45px !important;
         }
+        /* Inject the elegant 3-line legal symbol */
         [data-testid="stSidebarCollapseButton"] button::before {
-            content: "☰" !important; /* Pure elegant legal three-line menu icon */
+            content: "☰" !important; 
             color: #D4AF37 !important;
             font-size: 20px !important;
             font-weight: bold !important;
             display: inline-block !important;
         }
-        [data-testid="stSidebarCollapseButton"] button span {
+        /* CRUSH THE STUBBORN ICON TEXT LABEL TO ZERO SIZE AND MAKE IT INVISIBLE */
+        [data-testid="stSidebarCollapseButton"] button *, 
+        [data-testid="stSidebarCollapseButton"] button span,
+        [data-testid="stSidebarCollapseButton"] button div {
+            font-size: 0px !important;
+            color: transparent !important;
             display: none !important;
             visibility: hidden !important;
         }
         
+        /* Wipe out general header layouts */
+        .stApp > header {
+            display: none !important;
+            visibility: hidden !important;
+        }
         /* Enforce elegant legal text styling globally */
         p, span, label, li {
             color: #CCD6F6 !important;
@@ -117,7 +130,6 @@ with st.sidebar:
     st.markdown("<p style='color:#00E676; font-size:12px; font-weight:bold;'>SECURE ENCRYPTED NODE ACTIVE</p>", unsafe_allow_html=True)
     st.write("---")
     
-    # DYNAMIC LOG: Populates shortcut boxes for every question asked
     st.markdown("<h4 style='color:#D4AF37; font-family:serif;'>ACTIVE CHAT SESSION LOGS</h4>", unsafe_allow_html=True)
     user_queries = [msg["content"] for msg in st.session_state.messages if msg["role"] == "user"]
     
